@@ -1,5 +1,0 @@
-# docs/requirements_docs.txt
-sphinx
-sphinx-autobuild
-sphinx_rtd_theme
-m2r2
