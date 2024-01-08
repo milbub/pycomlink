@@ -16,9 +16,8 @@ set_session(tf.compat.v1.Session(config=config))
 
 
 def get_model_file_path():
-    return pkg_resources.resource_filename(
-        "pycomlink", "/processing/wet_dry/cnn_model_files"
-    )
+    current_dir = os.path.dirname(__file__)
+    return os.path.join(current_dir, "cnn_model_files")
 
 
 modelh5_fn = str(get_model_file_path() + "/model_2020.002.180m.h5")

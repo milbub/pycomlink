@@ -4,12 +4,14 @@ import tensorflow as tf
 import pkg_resources
 import pandas as pd
 
+
 def get_model_file_path():
-    return pkg_resources.resource_filename(
-        "pycomlink", "/processing/wet_dry/mlp_model_files"
-    )
+    current_dir = os.path.dirname(__file__)
+    return os.path.join(current_dir, "mlp_model_files")
+
 
 model = tf.keras.models.load_model(str(get_model_file_path() + "/model_mlp.keras"))
+
 
 def mlp_wet_dry(
     trsl_channel_1, 
