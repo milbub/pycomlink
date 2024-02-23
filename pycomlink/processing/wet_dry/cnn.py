@@ -1,7 +1,6 @@
 import os
 import pandas as pd
 import numpy as np
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'  # noqa
 import tensorflow as tf
 from tensorflow.keras.models import model_from_json
 from tensorflow.keras.optimizers import SGD
