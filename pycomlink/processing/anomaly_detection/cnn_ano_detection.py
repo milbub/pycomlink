@@ -1,3 +1,4 @@
+import os
 import pandas as pd
 import numpy as np
 import tensorflow as tf
@@ -15,9 +16,8 @@ set_session(tf.compat.v1.Session(config=config))
 
 
 def get_model_file_path():
-    return pkg_resources.resource_filename(
-        "pycomlink", "/processing/anomaly_detection/cnn_model"
-    )
+    current_dir = os.path.dirname(__file__)
+    return os.path.join(current_dir, "cnn_model")
 
 
 # load model
