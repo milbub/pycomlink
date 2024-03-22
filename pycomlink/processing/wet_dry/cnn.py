@@ -3,9 +3,7 @@ import pandas as pd
 import numpy as np
 import tensorflow as tf
 from tensorflow.keras.models import model_from_json
-from tensorflow.keras.optimizers import SGD
 from tensorflow.compat.v1.keras.backend import set_session
-import pkg_resources
 
 
 # Limit GPU memory usage to avoid processes to run out of memory.
