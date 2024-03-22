@@ -1,4 +1,6 @@
 import os
+
+import numpy
 import pandas as pd
 import numpy as np
 import tensorflow as tf
@@ -38,6 +40,18 @@ def _rolling_window(a, window):
     return np.lib.stride_tricks.as_strided(
         a, shape=shape, strides=strides, writeable=False
     )
+
+
+def _add_right_padding(arr: numpy.ndarray, pads: int):
+    last_val_repeated = np.repeat(arr[-1], pads)
+    new_arr = np.concatenate((arr[pads:], last_val_repeated))
+    return new_arr
+
+
+def _add_left_padding(arr, pads: int):
+    first_val_repeated = np.repeat(arr[0], pads)
+    new_arr = np.concatenate((first_val_repeated, arr))[:len(arr)]
+    return new_arr
 
 
 def cnn_wet_dry(
@@ -85,10 +99,9 @@ def cnn_wet_dry(
     #################
     # Normalization #
     #################
-
     df = pd.DataFrame()
-    df["trsl1"] = trsl_channel_1.copy()
-    df["trsl2"] = trsl_channel_2.copy()
+    df["trsl1"] = _add_right_padding(trsl_channel_1.copy(), 29)
+    df["trsl2"] = _add_right_padding(trsl_channel_2.copy(), 29)
     df["med1"] = df["trsl1"].rolling(72 * 60, min_periods=2 * 60, center=False).median()
     df["med2"] = df["trsl2"].rolling(72 * 60, min_periods=2 * 60, center=False).median()
     df["trsl1"] = df["trsl1"].sub(df["med1"])
@@ -120,10 +133,11 @@ def cnn_wet_dry(
         ):
             cnn_pred[i] = np.nan
 
-    # Due to the moving window approach predictions can only be made for minutes 151 to -30.
-    # The following line fills beginning and end of the prediction array with NaN.
+    # Due to the moving window approach predictions can only be made for minutes 181 to N.
+    # The following line fills beginning of the prediction array with NaNs.
+    padded_cnn_pred = _add_left_padding(cnn_pred, 29)
     df["prediction"] = np.concatenate(
-        (np.repeat(np.nan, 150), cnn_pred, np.repeat(np.nan, 29)), axis=0
+        (np.repeat(np.nan, 179), padded_cnn_pred), axis=0
     )
 
     if threshold is None:
