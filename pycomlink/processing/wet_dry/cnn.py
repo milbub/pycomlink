@@ -8,6 +8,9 @@ from tensorflow.keras.models import model_from_json
 from tensorflow.compat.v1.keras.backend import set_session
 
 
+CNN_OUTPUT_LEFT_NANS_LENGTH = 327
+
+
 # Limit GPU memory usage to avoid processes to run out of memory.
 # For a list of processes blocking GPU memory on an nvidia GPU type 'nvidia-smi' in the terminal.
 config = tf.compat.v1.ConfigProto()
